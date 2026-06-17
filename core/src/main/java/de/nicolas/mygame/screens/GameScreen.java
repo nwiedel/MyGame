@@ -36,8 +36,8 @@ public class GameScreen implements Screen {
 
         playerX = 100;
         playerY = 100;
-        playerWidth = 128;
-        playerHeight = 128;
+        playerWidth = 64;
+        playerHeight = 64;
         playerSpeed = 220;
         movement = new Vector2(0, 0);
     }
