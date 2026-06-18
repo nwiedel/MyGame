@@ -24,14 +24,16 @@ public class GameScreen implements Screen {
     private float playerSpeed;
     private Vector2 movement;
 
+    private Screen oldScreen;
+
     public GameScreen(MyGame game){
         this.game = game;
+        batch = game.getBatch();
     }
 
     @Override
     public void show() {
         // Aufruf einmalig zu Beginn
-        batch = new SpriteBatch();
         playerTexture = new Texture("player.png");
 
         playerX = 100;
@@ -81,6 +83,15 @@ public class GameScreen implements Screen {
         }
 
         movement.set(0, 0);
+
+        if (Gdx.input.isKeyPressed(Input.Keys.F2)){
+            oldScreen = game.getScreen();
+            game.setScreen(new MenuScreen(game));
+
+            if (oldScreen != null){
+                oldScreen.dispose();
+            }
+        }
     }
 
     private void keepPlayerInsideScreen(){
@@ -131,7 +142,7 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         // säubert überflüssige Ressourcen
-        batch.dispose();
         playerTexture.dispose();
+        oldScreen = null;
     }
 }

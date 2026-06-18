@@ -4,9 +4,11 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
 import de.nicolas.mygame.MyGame;
+import de.nicolas.mygame.platform.PlatformServices;
 
 /** Launches the GWT application. */
 public class GwtLauncher extends GwtApplication {
+
         @Override
         public GwtApplicationConfiguration getConfig () {
             // Resizable application, uses available space in browser with no padding:
@@ -21,6 +23,6 @@ public class GwtLauncher extends GwtApplication {
 
         @Override
         public ApplicationListener createApplicationListener () {
-            return new MyGame();
+            return new MyGame(new HtmlService());
         }
 }
