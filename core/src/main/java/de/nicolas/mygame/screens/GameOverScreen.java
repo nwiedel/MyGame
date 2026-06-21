@@ -7,11 +7,11 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import de.nicolas.mygame.MyGame;
 import de.nicolas.mygame.ScreenType;
 
-public class MenuScreen implements Screen {
+public class GameOverScreen implements Screen {
 
-    private final MyGame game;
+    private MyGame game;
 
-    public MenuScreen(MyGame game){
+    public GameOverScreen(MyGame game){
         this.game = game;
     }
 
@@ -26,21 +26,25 @@ public class MenuScreen implements Screen {
         draw();
     }
 
-    private void update(float delta){
+    public void update(float delta){
         handleInput(delta);
-
     }
 
-    private void handleInput(float delta){
-
+    public void handleInput(float delta){
         // Der Tastendruck soll nur einmal zur Ausführung führen --> isKeyJustPressed
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.R)){
             game.changeScreen(ScreenType.GAME);
         }
+        // Der Tastendruck soll nur einmal zur Ausführung führen --> isKeyJustPressed
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+            game.changeScreen(ScreenType.MENU);
+        }
+
     }
 
     public void draw(){
-        ScreenUtils.clear(0.08f, 0.08f, 0.12f, 1f);
+
+        ScreenUtils.clear(0.12f, 0.04f, 0.04f, 1f);
     }
 
     @Override

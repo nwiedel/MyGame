@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import de.nicolas.mygame.MyGame;
+import de.nicolas.mygame.ScreenType;
+import de.nicolas.mygame.entities.Player;
 import de.nicolas.mygame.utils.GameConfig;
 
 public class GameScreen implements Screen {
@@ -18,20 +20,17 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private OrthographicCamera camera;
 
+    private Player player;
+
     private Texture playerTexture;
 
-    private float playerX;
-    private float playerY;
-    private float playerWidth;
-    private float playerHeight;
-    private float playerSpeed;
-    private Vector2 movement;
-
-    private Screen oldScreen;
+    private boolean paused;
 
     public GameScreen(MyGame game){
         this.game = game;
+
         batch = game.getBatch();
+
         camera = game.getCamera();
         camera.setToOrtho(false, 960, 540);
     }
@@ -41,12 +40,9 @@ public class GameScreen implements Screen {
         // Aufruf einmalig zu Beginn
         playerTexture = new Texture("player.png");
 
-        playerX = 100;
-        playerY = 100;
-        playerWidth = 64;
-        playerHeight = 64;
-        playerSpeed = 220;
-        movement = new Vector2(0, 0);
+        player = new Player(100, 100);
+
+        paused = false;
     }
 
     @Override
@@ -58,68 +54,26 @@ public class GameScreen implements Screen {
 
     private void update(float delta){
         // Spielelogik
-        handleInput(delta);
-        keepPlayerInsideScreen();
-    }
-
-    private void handleInput(float delta){
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) ||
-            Gdx.input.isKeyPressed(Input.Keys.D)){
-            movement.x += 1;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.P)){
+            paused = !paused;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) ||
-            Gdx.input.isKeyPressed(Input.Keys.A)){
-            movement.x -= 1;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP) ||
-            Gdx.input.isKeyPressed(Input.Keys.W)){
-            movement.y += 1;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) ||
-            Gdx.input.isKeyPressed(Input.Keys.S)){
-            movement.y -= 1;
+        if (paused){
+            return;
         }
 
-        if (movement.len2() > 0){
-            movement.nor();
+        player.update(delta);
 
-            playerX += movement.x * playerSpeed * delta;
-            playerY += movement.y * playerSpeed * delta;
-        }
-
-        movement.set(0, 0);
-
-        if (Gdx.input.isKeyPressed(Input.Keys.F2)){
-            oldScreen = game.getScreen();
-            game.setScreen(new MenuScreen(game));
-
-            if (oldScreen != null){
-                oldScreen.dispose();
-            }
-        }
-    }
-
-    private void keepPlayerInsideScreen(){
-        if (playerX < 0){
-            playerX = 0;
-        }
-        if (playerY < 0){
-            playerY = 0;
-        }
-        if (playerX + playerWidth > Gdx.graphics.getWidth()){
-            playerX = Gdx.graphics.getWidth() - playerWidth;
-        }
-        if (playerY + playerHeight > Gdx.graphics.getHeight()){
-            playerY = Gdx.graphics.getHeight() - playerHeight;
+        if (player.getHealth() <= 0){
+            game.changeScreen(ScreenType.GAME_OVER);
         }
     }
 
     private void draw(){
         // das Zeichnen
 
-        ScreenUtils.clear(GameConfig.CORNFLOWER_BLUE);
+        ScreenUtils.clear(0.1f, 0.1f, 0.15f, 1f);
 
-        updateCamera();
+        //updateCamera();
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
@@ -133,11 +87,13 @@ public class GameScreen implements Screen {
     private void drawWorld(){}
 
     private void drawPlayer(){
-        batch.draw(playerTexture, playerX, playerY, playerWidth, playerHeight);
+        batch.draw(playerTexture, player.getX(), player.getY(),
+            player.getWidth(), player.getHeight());
     }
 
     private void updateCamera(){
-        camera.position.set(playerX + playerWidth / 2f, playerY + playerHeight / 2f, 0);
+        camera.position.set(player.getX() + player.getWidth() / 2f,
+            player.getY() + player.getHeight() / 2f, 0);
         camera.update();
     }
 
@@ -165,6 +121,5 @@ public class GameScreen implements Screen {
     public void dispose() {
         // säubert überflüssige Ressourcen
         playerTexture.dispose();
-        oldScreen = null;
     }
 }
