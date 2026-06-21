@@ -3,6 +3,7 @@ package de.nicolas.mygame.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -15,6 +16,8 @@ public class GameScreen implements Screen {
     private final MyGame game;
 
     private SpriteBatch batch;
+    private OrthographicCamera camera;
+
     private Texture playerTexture;
 
     private float playerX;
@@ -29,6 +32,8 @@ public class GameScreen implements Screen {
     public GameScreen(MyGame game){
         this.game = game;
         batch = game.getBatch();
+        camera = game.getCamera();
+        camera.setToOrtho(false, 960, 540);
     }
 
     @Override
@@ -114,9 +119,26 @@ public class GameScreen implements Screen {
 
         ScreenUtils.clear(GameConfig.CORNFLOWER_BLUE);
 
+        updateCamera();
+        batch.setProjectionMatrix(camera.combined);
+
         batch.begin();
-        batch.draw(playerTexture, playerX, playerY, playerWidth, playerHeight);
+
+        drawWorld();
+        drawPlayer();
+
         batch.end();
+    }
+
+    private void drawWorld(){}
+
+    private void drawPlayer(){
+        batch.draw(playerTexture, playerX, playerY, playerWidth, playerHeight);
+    }
+
+    private void updateCamera(){
+        camera.position.set(playerX + playerWidth / 2f, playerY + playerHeight / 2f, 0);
+        camera.update();
     }
 
     @Override

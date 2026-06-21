@@ -1,6 +1,7 @@
 package de.nicolas.mygame;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import de.nicolas.mygame.platform.PlatformServices;
 import de.nicolas.mygame.screens.MenuScreen;
@@ -10,6 +11,7 @@ public class MyGame extends Game {
     private final PlatformServices platformServices;
 
     private SpriteBatch batch;
+    private OrthographicCamera camera;
 
     public MyGame(PlatformServices platformServices){
         this.platformServices = platformServices;
@@ -19,6 +21,7 @@ public class MyGame extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
+        camera = new OrthographicCamera();
         setScreen(new MenuScreen(this));
     }
 
@@ -34,5 +37,9 @@ public class MyGame extends Game {
 
     public SpriteBatch getBatch() {
         return batch;
+    }
+
+    public OrthographicCamera getCamera() {
+        return camera;
     }
 }
