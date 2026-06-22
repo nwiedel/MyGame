@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
+import de.nicolas.mygame.InputHandler;
 import de.nicolas.mygame.MyGame;
 import de.nicolas.mygame.ScreenType;
 import de.nicolas.mygame.entities.Player;
@@ -26,6 +27,8 @@ public class GameScreen implements Screen {
 
     private boolean paused;
 
+    private InputHandler inputHandler;
+
     public GameScreen(MyGame game){
         this.game = game;
 
@@ -43,6 +46,8 @@ public class GameScreen implements Screen {
         player = new Player(100, 100);
 
         paused = false;
+
+        inputHandler = new InputHandler();
     }
 
     @Override
@@ -61,7 +66,8 @@ public class GameScreen implements Screen {
             return;
         }
 
-        player.update(delta);
+        Vector2 movement = inputHandler.getMovement();
+        player.update(delta, movement);
 
         if (player.getHealth() <= 0){
             game.changeScreen(ScreenType.GAME_OVER);

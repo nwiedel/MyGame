@@ -3,11 +3,12 @@ package de.nicolas.mygame.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
+import de.nicolas.mygame.utils.GameConfig;
 
 public class Player {
 
     private Vector2 position;
-    private Vector2 movement;
+    //private Vector2 movement;
     private float speed;
     private float width;
     private float height;
@@ -15,45 +16,17 @@ public class Player {
 
     public Player(float x, float y){
         position = new Vector2(x, y);
-        movement = new Vector2();
-        speed = 220f;
+        //movement = new Vector2();
+        speed = GameConfig.PLAYER_SPEED;
         width = 64f;
         height = 64f;
         health = 3;
     }
 
-    public void update(float delta){
-        handleInput();
-        move(delta);
-        clampToScreen();
-    }
-
-    private void handleInput(){
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) ||
-            Gdx.input.isKeyPressed(Input.Keys.D)){
-            movement.x += 1;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) ||
-            Gdx.input.isKeyPressed(Input.Keys.A)){
-            movement.x -= 1;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP) ||
-            Gdx.input.isKeyPressed(Input.Keys.W)){
-            movement.y += 1;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) ||
-            Gdx.input.isKeyPressed(Input.Keys.S)){
-            movement.y -= 1;
-        }
-
-        if (movement.len2() > 0){
-            movement.nor();
-        }
-    }
-
-    private void move(float delta){
+    public void update(float delta, Vector2 movement){
         position.x += movement.x * speed * delta;
         position.y += movement.y * speed * delta;
+        clampToScreen();
     }
 
     private void clampToScreen(){

@@ -11,5 +11,6 @@ public class GameConfig {
     public static final int WIDTH = 960;
     /** Höhe des Fensters für das Spiel */
     public static final int HEIGHT = 540;
-
+    /** Geschwindigkeit des Spielers */
+    public static final float PLAYER_SPEED = 220;
 }
