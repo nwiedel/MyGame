@@ -2,6 +2,12 @@
 
 After the Book: Practical Java Game Development with LibGDX by Arlen Kaelen
 
+# Assets
+
+All assets are from the free AssetPack from Craftpix: Simple Platformer Pixel Art Asset Collection
+
+# LibGDX Specification
+
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
 
 This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.

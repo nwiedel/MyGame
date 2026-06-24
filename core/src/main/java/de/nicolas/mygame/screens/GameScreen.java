@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import de.nicolas.mygame.InputHandler;
@@ -24,6 +25,8 @@ public class GameScreen implements Screen {
     private Player player;
 
     private Texture playerTexture;
+    private TextureRegion playerRegion;
+    private TextureRegion[] idleFrames;
 
     private boolean paused;
 
@@ -41,7 +44,23 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         // Aufruf einmalig zu Beginn
-        playerTexture = new Texture("player.png");
+        playerTexture = new Texture("player/fox/idle.png");
+        playerRegion = new TextureRegion(playerTexture, 0, 0, 32, 32);
+
+        TextureRegion[][] idleSplitFrames = TextureRegion.split(playerTexture, 32, 32);
+
+        idleFrames = new TextureRegion[11];
+        idleFrames[0] = idleSplitFrames[0][0];
+        idleFrames[1] = idleSplitFrames[0][1];
+        idleFrames[2] = idleSplitFrames[0][2];
+        idleFrames[3] = idleSplitFrames[0][3];
+        idleFrames[4] = idleSplitFrames[0][4];
+        idleFrames[5] = idleSplitFrames[0][5];
+        idleFrames[6] = idleSplitFrames[0][6];
+        idleFrames[7] = idleSplitFrames[0][7];
+        idleFrames[8] = idleSplitFrames[0][8];
+        idleFrames[9] = idleSplitFrames[0][9];
+        idleFrames[10] = idleSplitFrames[0][10];
 
         player = new Player(100, 100);
 
@@ -93,7 +112,7 @@ public class GameScreen implements Screen {
     private void drawWorld(){}
 
     private void drawPlayer(){
-        batch.draw(playerTexture, player.getX(), player.getY(),
+        batch.draw(idleFrames[10], player.getX(), player.getY(),
             player.getWidth(), player.getHeight());
     }
 
