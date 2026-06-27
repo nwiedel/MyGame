@@ -23,6 +23,7 @@ public class GameScreen implements Screen {
     private OrthographicCamera camera;
 
     private Player player;
+    private float playerRotation;
 
     private Texture playerTexture;
     private TextureRegion playerRegion;
@@ -74,6 +75,19 @@ public class GameScreen implements Screen {
         // Aufruf in jedem Frame
         update(delta);
         draw();
+
+        /*
+        Reihenfolge des zeichnens
+
+        Hintergrund
+        statische Objekte
+        Collectibles
+        Gegener
+        Player
+        Effekte
+        UI
+
+         */
     }
 
     private void update(float delta){
@@ -90,6 +104,12 @@ public class GameScreen implements Screen {
 
         if (player.getHealth() <= 0){
             game.changeScreen(ScreenType.GAME_OVER);
+        }
+
+        // Spielerrotatio
+        playerRotation += 180f * delta;
+        if (playerRotation >= 360F) {
+            playerRotation -= 360f;
         }
     }
 
@@ -114,6 +134,15 @@ public class GameScreen implements Screen {
     private void drawPlayer(){
         batch.draw(idleFrames[10], player.getX(), player.getY(),
             player.getWidth(), player.getHeight());
+
+        // zeichnen mit Rotation
+        batch.draw(idleFrames[1].getTexture(),
+            player.getX(), player.getY(),
+            player.getWidth() / 2, player.getHeight() /2,
+            player.getWidth(), player.getHeight(),
+            1, 1, playerRotation, 0, 0,
+            idleFrames[1].getRegionWidth(), idleFrames[1].getRegionHeight(),
+            false, false);
     }
 
     private void updateCamera(){
