@@ -36,11 +36,11 @@ public class Player {
         if (position.y < 0){
             position.y = 0;
         }
-        if (position.x + width > Gdx.graphics.getWidth()){
-            position.x = Gdx.graphics.getWidth() - width;
+        if (position.x + width > GameConfig.WORLD_WIDTH){
+            position.x = GameConfig.WORLD_WIDTH - width;
         }
-        if (position.y + height > Gdx.graphics.getHeight()){
-            position.y = Gdx.graphics.getHeight() - height;
+        if (position.y + height > GameConfig.WORLD_HEIGHT){
+            position.y = GameConfig.WORLD_HEIGHT - height;
         }
     }
 

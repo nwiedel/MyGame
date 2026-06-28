@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import de.nicolas.mygame.InputHandler;
 import de.nicolas.mygame.MyGame;
 import de.nicolas.mygame.ScreenType;
@@ -21,6 +23,7 @@ public class GameScreen implements Screen {
 
     private SpriteBatch batch;
     private OrthographicCamera camera;
+    private Viewport viewport;
 
     private Player player;
     private float playerRotation;
@@ -28,6 +31,7 @@ public class GameScreen implements Screen {
     private Texture playerTexture;
     private TextureRegion playerRegion;
     private TextureRegion[] idleFrames;
+    private Texture backgroundTexture;
 
     private boolean paused;
 
@@ -45,6 +49,9 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         // Aufruf einmalig zu Beginn
+        viewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, camera);
+
+        backgroundTexture = new Texture("background.png");
         playerTexture = new Texture("player/fox/idle.png");
         playerRegion = new TextureRegion(playerTexture, 0, 0, 32, 32);
 
@@ -118,7 +125,8 @@ public class GameScreen implements Screen {
 
         ScreenUtils.clear(0.1f, 0.1f, 0.15f, 1f);
 
-        //updateCamera();
+        viewport.apply();
+        updateCamera();
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
@@ -129,20 +137,23 @@ public class GameScreen implements Screen {
         batch.end();
     }
 
-    private void drawWorld(){}
+    private void drawWorld(){
+        batch.draw(backgroundTexture, 0, 0,
+            backgroundTexture.getWidth(), backgroundTexture.getHeight());
+    }
 
     private void drawPlayer(){
         batch.draw(idleFrames[10], player.getX(), player.getY(),
             player.getWidth(), player.getHeight());
 
         // zeichnen mit Rotation
-        batch.draw(idleFrames[1].getTexture(),
+        /*batch.draw(idleFrames[1].getTexture(),
             player.getX(), player.getY(),
             player.getWidth() / 2, player.getHeight() /2,
             player.getWidth(), player.getHeight(),
             1, 1, playerRotation, 0, 0,
             idleFrames[1].getRegionWidth(), idleFrames[1].getRegionHeight(),
-            false, false);
+            false, false);*/
     }
 
     private void updateCamera(){
@@ -154,6 +165,7 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         // behandele screen resize
+        viewport.update(width, height, true);
     }
 
     @Override
